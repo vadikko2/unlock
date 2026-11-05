@@ -1,149 +1,125 @@
 ---
 name: change-ip
 description: >-
-  Change the public IPv4 of the unlock AmneziaWG VDS, update the domain A-record,
-  verify DNS/reachability, and refresh GitHub deploy secrets. Use when the user
-  says /change-ip, "change IP", "rotate IP", "new IP for VPN", "IP not reachable
-  from home", or asks to rotate the Amsterdam VDS address for 24testreservation.ru.
+  Move or rotate the public IPv4 of the unlock VPN (AmneziaWG + Cursor proxy).
+  The VPS may be on 62yun or Timeweb. DNS for 24testreservation.ru stays on
+  Timeweb either way. Use when the user says /change-ip, "change IP",
+  "rotate IP", "new IP for VPN", "move the server", or "switch the domain".
 ---
 
-# /change-ip — rotate public IP for unlock VDS
+# /change-ip — point the VPN at a working address
 
-Project **unlock**: AmneziaWG + Cursor proxy on a Timeweb VDS in Amsterdam (`nl-1`).
-VPN domain: `WG_HOST` from `.env` (default `24testreservation.ru`).
+The stack is Docker Compose in `/opt/unlock`. Clients live in git (`amnezia/wireguard/wg0.json`). `WG_HOST` stays the domain. `DEPLOY_HOST` is the IP GitHub Actions SSH to. Cursor `http.proxy` stays on the domain.
 
-Account constants (re-check via MCP at start):
+DNS for `24testreservation.ru` is always Timeweb (`update_dns_record`), even when the VPS is not.
 
-| Item | Value |
+## Where things are (re-check, do not trust a stale IP)
+
+| Role | Current value |
 |---|---|
-| Server name | `AmneziaWG` |
-| Server id | `6345973` (if missing — `list_servers`) |
-| Domain | `24testreservation.ru` (`WG_HOST`) |
-| GitHub repo | `vadikko2/unlock` |
-| SSH | `root@CURRENT_IP` (user key `~/.ssh/id_ed25519`) |
+| Live VPS | 62yun, panel id `194815`, name `svr_194815`, Ubuntu 24.04, Dronten. IPv4 `199.246.126.45`, NIC `ens192`, gateway `199.246.126.1` |
+| 62yun panel | https://62yun.ru/servers/control/index/194815 — browser session only, no API |
+| DNS | Timeweb zone `24testreservation.ru`. Authoritative check: `dig +norecurse 24testreservation.ru A @85.193.93.93` |
+| GitHub | `vadikko2/unlock`. Secrets `DEPLOY_HOST`, `DEPLOY_USER` (`root`), `DEPLOY_SSH_KEY` |
+| SSH keys on the box | user `~/.ssh/id_ed25519` and repo `.deploy-keys/gha_deploy` |
+| Old Timeweb VPS | `AmneziaWG` id `6345973`, `179.252.208.227`, `nl-1`. Not the deploy target while `DEPLOY_HOST` is the 62yun address. It keeps billing until the user removes it |
 
-Use Timeweb MCP (`timeweb-cloud` / `search_tools` → `get_tool_definition` → `execute_tool`).
-`[WRITE]` needs two-step `confirm_token`. `[BILLABLE]` — read the live price from `operation_summary` and get an explicit yes before the confirming call. Do not quote a price from memory.
+`gh` on this Mac is `/opt/homebrew/Cellar/gh/2.102.0/bin/gh` when it is missing from `PATH`.
 
-Do these five steps in order. Do not change DNS until step 2 passed. Do not unbind the old address until step 4 shows the new one.
+Read `ssh root@$DEPLOY_HOST 'ip -4 addr; ip route'` and `dig +short` first. The host is whichever of those two answers. Do not order a Timeweb floating IP when the live box is 62yun.
 
-## 1. Get a new IP from a different subnet
+## Order
 
-1. `get_server` / `list_floating_ips` and `ip -4 addr show eth0` on the box. Note the current primary (DHCP `/24`), its gateway (`ip route`), and the floating-IP UUID.
-2. `create_floating_ip` in the server's zone (`ams-1`), `is_ddos_guard: false`. The tool cannot pick a prefix. It only picks the zone. The summary names the monthly price (plain `floating_ip` in this zone). The address is billed from creation, bound or not, and MCP cannot delete it.
-3. Reject the result when its `/24` is the same as the current primary. Say so and stop this run rather than pointing DNS at the blocked prefix.
-4. `bind_floating_ip` to server `6345973`. `get_server` must list the new IPv4 (`is_main: false` is expected). Binding does not configure the guest.
+Do not change the A-record until the new address is on the machine and home can deliver packets to it. Do not tell the user to reconnect Amnezia until authoritative DNS shows the new IP.
 
-At most two paid addresses per run. After two different prefixes fail step 2, stop. Unbind every failed address in that same run (see below). Do not leave it on the server.
+### 1. Get the address onto a machine
 
-## 2. Put that IP on the machine and prove it works
+**Same 62yun VPS, new address.** There is no API. In the panel use "Заменить IP-адрес". The guest learns it by DHCP on `ens192`. Do not add a `/32` by hand and do not use the Timeweb floating-IP flow. SSH to the new address, then set `DEPLOY_HOST` to it.
 
-Binding, a guest-agent restart, and a reboot do **not** add the address to `eth0`. Cloud-init DHCP stays on the old `/24`. Do not set `dhcp4: false` and do not replace `50-cloud-init.yaml`.
+**New 62yun VPS (what happened on 2026-11-05).** The panel root password is in the page markup, not in chat. Use it once, then install keys and stop using the password:
 
-On the server, add the address as `/32` (the hypervisor routes it to this NIC; a second gateway is not required while the old default route exists):
+- `~/.ssh/id_ed25519.pub` and `.deploy-keys/gha_deploy.pub` into `/root/.ssh/authorized_keys` (`700` / `600`)
+- Docker Engine and the Compose plugin, if `docker compose version` fails. `modprobe tun`
+- `gh secret set DEPLOY_HOST -R vadikko2/unlock -b 'NEW_IP'`
+- `gh workflow run "Deploy to VDS" -R vadikko2/unlock` and wait until the run is green
+- Peer count from `wg show` must not be zero. `wg0.json` arrives with the deploy. Do not recreate clients in the web UI
 
-```bash
-ip addr add NEW/32 dev eth0
-ping -c 2 -W 2 -I NEW 1.1.1.1
-```
+**Timeweb VPS only.** `create_floating_ip` in the server zone (`ams-1` for `6345973`), `is_ddos_guard: false`. Quote the price from `operation_summary` and get an explicit yes. The tool cannot pick a prefix. Reject a `/24` that matches the blocked primary. `bind_floating_ip` does not configure the guest: `ip addr add NEW/32 dev eth0`, persist in `/etc/netplan/60-unlock-extra-ips.yaml` mode `600`, leave DHCP on `50-cloud-init.yaml` alone. A reboot does not install the extra address. At most two paid addresses per run. Unbind a failed one in that same run (`unbind_floating_ip`), `ip addr del` it, then `get_floating_ip`. Not found means it is gone. If it is still listed, the reply names the address and UUID; deletion is panel-only at https://timeweb.cloud/my .
 
-`2 received` means the host may send from the new source through the current gateway. Then make it survive reboot. New file, mode `600` (netplan skips a world-readable file):
+### 2. Prove the address works while it is on the NIC
 
-```yaml
-# /etc/netplan/60-unlock-extra-ips.yaml
-network:
-  version: 2
-  ethernets:
-    eth0:
-      addresses:
-        - "NEW/32"
-```
+Checks after the address is unattached prove nothing. On 2026-11-05 a traceroute to already-unbound addresses died in the same place as a live block.
 
-`chmod 600` that file, then `netplan generate && netplan apply`. SSH to the old IP must still work afterwards. `ip -4 addr show eth0` must show both the DHCP primary and `NEW/32`.
-
-Then three reachability checks. All three are required.
-
-1. **Another network, not the user's LAN.** From another account VDS (the SPb box `85.193.91.121` if the user key logs in): `ping -c 2 NEW`. `0% loss` means the fabric delivers this address to the VM. `100% loss` means the guest or the bind is wrong — fix that, do not call it a blocked subnet.
-2. **The user's machine, off the tunnel.** `route -n get NEW` must show `en0` and the LAN gateway. A default route via `utun` hairpins through Amnezia and lies. Then `ping -c 3 NEW` and `nc -z -G 4 NEW 22`.
-3. **If the home ping fails, capture on the server during that ping:** `timeout 8 tcpdump -n -i eth0 host NEW -c 6`.
-   - `0 packets` while check 1 succeeded: this path drops the prefix. Do not change DNS.
-   - Packets arrive and nothing answers: fix the guest, then retest.
-
-Home Wi-Fi answering the old `/24` does not mean a new prefix works, and it does not mean mobile carriers will accept it. If this rotation is because mobile networks block the current prefix, ask the user to ping `NEW` from the phone before step 3. Never move the A-record to an address the home machine cannot ping.
-
-On 2026-11-05 the primary `179.252.208.227/24` answered from home Wi-Fi. Two other Amsterdam prefixes (`64.188.62.238`, `147.45.238.50`) answered from the SPb VDS and from the box itself (`ping -I`), and from home Wi-Fi both ICMP and TCP/22 were dead with zero frames on `eth0`. DNS stayed on the old address. Both failed addresses were then unbound; `get_floating_ip` returned not found, so there was nothing left to delete.
-
-When step 2 fails, clean the guest and unbind before you stop:
+From the Mac, off the tunnel. `route -n get NEW` must show `en0` and `192.168.0.1`. A `utun` default route hairpins through Amnezia.
 
 ```bash
-ip addr del NEW/32 dev eth0
-# drop that address from /etc/netplan/60-unlock-extra-ips.yaml, or remove the file if it is the only one
-netplan generate && netplan apply
+traceroute -n -w 2 -m 12 -q 1 NEW
+nc -z -G 5 NEW 1080
+nc -z -G 5 NEW 51822
 ```
 
-Then `unbind_floating_ip` for that UUID. Check `get_floating_ip` afterwards.
+This home ISP is `192.168.0.1` → `10.150.162.1` → `10.148.252.13` → `89.223.47.17`. If traceroute never passes `10.148.252.13`, the ISP dropped the prefix. That happened for Timeweb Amsterdam prefixes `64.188.62.238`, `147.45.238.50`, `72.56.101.17`, `216.57.110.242`, and `201.34.144.129`. Do not put those in DNS. `199.246.126.45` passed that hop.
 
-- Not found: the address is gone from the account. Do not tell the user to delete it.
-- Still listed, unbound: say so in the reply, with the address and UUID. Deletion is not in MCP (`delete_floating_ip` is not exposed). The user deletes it at https://timeweb.cloud/my . Unbind does not by itself stop the charge while the address still exists. Do not describe panel clicks.
-
-## 3. Point the A-record at the new IP
-
-Only after step 2 passed from home (ping `0%` and TCP/22 or UDP/443).
-
-1. `get_domain_dns_records` for `WG_HOST`.
-2. Update the root A-record (`update_dns_record`, PUT: resend the fields you must keep). Value = new IPv4, TTL `300`. Do not enable a cloud proxy.
-3. Leave `WG_HOST` as the domain. Do not write a raw IP into `.env` or GitHub variables.
-
-## 4. Check dig
-
-From the Mac and from the server:
+ICMP loss is not enough. 62yun answered SSH, TCP `1080`, and TCP `51822` while ping was silent. On the server, during the home probe, capture the real NIC (`ens192` on 62yun, `eth0` on Timeweb):
 
 ```bash
-dig +short 24testreservation.ru
+tcpdump -n -i NIC -w /tmp/cap.pcap host NEW
 ```
 
-Retry for a few minutes. Continue only when both answers are exactly the new IP. Then:
+A UDP datagram from the Mac to port `443` must show the home public address (this LAN was `31.134.187.175`). Also `ping -c 2 NEW` from another server (SPb `85.193.91.121` if the user key works). `0` packets from home while that other server gets replies means this path drops the prefix.
 
-1. `gh secret set DEPLOY_HOST -R vadikko2/unlock -b 'NEW_IP'`.
-2. `gh workflow run "Deploy to VDS" -R vadikko2/unlock` and wait until it is green.
-3. On the server: `docker compose -f /opt/unlock/docker-compose.yml ps`, Amnezia UI `http://127.0.0.1:51822/` returns a code, `ss` shows UDP `443` and TCP `1080`/`51822`, `wg show` peer count is not zero.
-4. SSH to `root@NEW` from home must succeed before step 5. Cursor `http.proxy` stays on the domain, not the new IP. Tell the user to toggle Amnezia off/on; the endpoint stays `WG_HOST:443`.
+If the rotation is because mobile carriers block the current prefix, ask for a ping from the phone before DNS. Home success does not prove mobile success.
 
-## 5. Unbind the old IP, then delete it
+### 3. Timeweb A-record
 
-Do this only after step 4 and only for the previous primary. Failed candidates are already unbound in step 2.
+Only after step 2. `get_domain_dns_records` for `24testreservation.ru`, then `update_dns_record` on the root A (PUT: resend fields you must keep). Value = new IPv4, TTL `300`. No cloud proxy. Leave `WG_HOST` as the domain.
 
-The primary is DHCP on the old `/24`, and the default route uses that gateway. Before `unbind_floating_ip`:
+The API can return the new value while the nameservers still serve the old one. On 2026-11-05 that gap was about six minutes, and the SOA serial did not move until the zone published. Keep checking:
 
-- Keep an on-link route to the current gateway and a default route that still works with source `NEW`.
-- Confirm `ping -I NEW -c 2 1.1.1.1` and SSH to `NEW` one more time.
+```bash
+dig +norecurse 24testreservation.ru A @85.193.93.93
+dig +short 24testreservation.ru A
+```
 
-Then `unbind_floating_ip` on the old UUID. SSH to `NEW` again. `ip -4 addr` must still have `NEW/32`, and `ping -c 2 1.1.1.1` must get 2 replies. If the box does not come back, `bind_floating_ip` the old UUID again.
+Continue only when the authoritative answer is the new IP. A local resolver may keep the previous TTL (the old record was 600 seconds). Timeweb's own docs allow up to a few hours, rarely a day.
 
-`search_tools("delete floating ip")` returns not-exposed (`delete_floating_ip` is panel-only). After unbind, call `get_floating_ip`. If it is not found, the address is already gone. If it is still on the account, the reply must list that address and UUID and tell the user to delete it at https://timeweb.cloud/my . Do not describe panel clicks. Do not claim the charge stopped while the address still exists.
+### 4. After dig matches
+
+`DEPLOY_HOST` must already be the new IP before this, otherwise the next push deploys to the old box. If the secret was set in step 1, do not set it again.
+
+Tell the user to toggle Amnezia off/on. The endpoint stays `WG_HOST:443`. Keys are not reissued.
+
+Cursor `http.proxy` stays `http://PROXY_USER:PROXY_PASSWORD@24testreservation.ru:1080` with `http.proxySupport: override` and `cursor.general.disableHttp2: true`. Do not write the new IP into settings. A full quit (Cmd+Q) is required: live sockets stay on the old proxy IP until the process exits.
+
+Do not power off the previous VPS unless the user asks. Say which machine is still billed.
+
+### 5. Release the old address
+
+62yun replace drops the previous address with the panel action. There is nothing to unbind.
+
+Timeweb: unbind only the previous primary, and only after SSH to the new address works. The DHCP default route uses the old gateway, so confirm `ping -I NEW -c 2 1.1.1.1` before `unbind_floating_ip`. If the box disappears, bind the old UUID again. Then `get_floating_ip` and list any address the user still has to delete.
 
 ## Report
 
-- old IP → new IP, and any rejected addresses that are still billed
-- home ping and TCP result, plus the outside-vantage ping
-- `dig` result
-- `DEPLOY_HOST` and deploy status
-- Cursor line unchanged (domain); Amnezia toggle
-- which addresses were unbound, which `get_floating_ip` no longer finds, and which address plus UUID the user still has to delete
+- which host (62yun or Timeweb), old IP → new IP
+- traceroute past `10.148.252.13` or not, and whether home UDP `443` arrived while the address was on the NIC
+- authoritative dig and local dig
+- deploy run and peer count
+- Cursor line unchanged; Amnezia toggle; anything still billed
 
 ## Anti-patterns
 
-- Do not run a disk `restore` to change an IP.
-- Do not change the A-record, `DEPLOY_HOST`, or the old binding when home ping/TCP to the new address fails.
-- Do not treat a reboot as the way to install an extra floating IP.
-- Do not order a third paid IP in the same run after two prefixes fail from home.
-- Do not leave a rejected address bound to the server. Unbind it in the same run.
-- Do not set `WG_HOST` or `http.proxy` to a raw IP unless the user asked.
-- Do not commit `.env` or MCP tokens.
-- Do not create Amnezia clients in the web UI — only git / `make add-client`.
+- Do not create a Timeweb floating IP to fix a 62yun server.
+- Do not judge an address that is already unbound.
+- Do not treat ping loss alone as a dead 62yun host.
+- Do not change the A-record when home packets never reach the NIC.
+- Do not tell the user to reconnect before authoritative DNS matches.
+- Do not set `WG_HOST` or `http.proxy` to a raw IP.
+- Do not commit `.env`, MCP tokens, or the panel root password.
+- Do not create Amnezia clients in the web UI.
 
 ## Related skills
 
-- Timeweb IPs: `.cursor/skills/timeweb-network/SKILL.md`
 - DNS: `.cursor/skills/timeweb-domains/SKILL.md`
-- VDS reboot: `.cursor/skills/timeweb-servers/SKILL.md`
+- Timeweb IPs, only when the VPS is Timeweb: `.cursor/skills/timeweb-network/SKILL.md`
+- Timeweb VDS reboot, same condition: `.cursor/skills/timeweb-servers/SKILL.md`

@@ -32,7 +32,7 @@ git commit -m "feat: add amnezia client Device name"
 git push origin master
 ```
 
-3. Confirm delivery before showing the QR. Watch the **Deploy to VDS** run for that push until it succeeds (`gh run watch` on `vadikko2/unlock`). A failed run means the new peer is not on the server: fix or report it, and do not tell the user the tunnel is ready. On success, the workflow log prints the peer count from `wg show`.
+3. Confirm delivery before showing the QR. Watch the **Deploy to VDS** run for that push until it succeeds (`gh run watch` on `vadikko2/unlock`). The run SSHs to `DEPLOY_HOST`. That host is the current VPS, which may be 62yun or Timeweb; do not assume the old Timeweb box. A failed run means the new peer is not on that server: fix or report it, and do not tell the user the tunnel is ready. On success, the workflow log prints the peer count from `wg show`. The phone still has to import the file; the endpoint in it is the domain, so a later IP change does not need a new config.
 
 4. Show the download QR. `qrcp` must be installed (`brew install qrcp` if `qrcp` is missing). Run this and leave it running so the QR stays on screen:
 
