@@ -1,0 +1,50 @@
+# AmneziaWG + Cursor (GOST) proxy.
+# Target: VDS with Docker (NOT Timeweb App Platform — see README).
+#
+# Secrets come from .env (copy .env.example → .env). Never commit .env.
+
+services:
+  amnezia-wg-easy:
+    build:
+      context: ./amnezia
+      dockerfile: Dockerfile
+    image: unlock-amnezia-wg-easy:local
+    container_name: amnezia-wg-easy
+    restart: unless-stopped
+    environment:
+      LANGUAGE: ${AMNEZIA_LANGUAGE:-ru}
+      WG_HOST: ${WG_HOST:?set WG_HOST in .env}
+      PASSWORD: ${AMNEZIA_PASSWORD:?set AMNEZIA_PASSWORD in .env}
+      PORT: ${AMNEZIA_UI_PORT:-51822}
+      WG_PORT: ${WG_PORT:-443}
+      WG_DEFAULT_ADDRESS: ${WG_DEFAULT_ADDRESS:-10.9.0.x}
+      WG_DEFAULT_DNS: ${WG_DEFAULT_DNS:-1.1.1.1}
+      WG_ALLOWED_IPS: ${WG_ALLOWED_IPS:-0.0.0.0/0}
+      WG_MTU: ${WG_MTU:-1280}
+      WG_PERSISTENT_KEEPALIVE: ${WG_PERSISTENT_KEEPALIVE:-25}
+    volumes:
+      - amnezia-wg-data:/etc/wireguard
+    ports:
+      - "${WG_PORT:-443}:443/udp"
+      - "${AMNEZIA_UI_PORT:-51822}:51822/tcp"
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    sysctls:
+      net.ipv4.conf.all.src_valid_mark: "1"
+      net.ipv4.ip_forward: "1"
+
+  cursor-proxy:
+    image: ginuerzh/gost:latest
+    container_name: cursor-proxy
+    restart: unless-stopped
+    command:
+      - "-L=${PROXY_USER:?set PROXY_USER in .env}:${PROXY_PASSWORD:?set PROXY_PASSWORD in .env}@:8080"
+    ports:
+      - "${PROXY_PORT:-1080}:8080/tcp"
+
+volumes:
+  amnezia-wg-data:
+    name: unlock_amnezia_wg_data

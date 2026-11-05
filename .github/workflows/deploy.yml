@@ -1,0 +1,48 @@
+name: Deploy to VDS
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync files to VDS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: 22
+          source: "docker-compose.yml,amnezia/,.env.example"
+          target: /opt/unlock
+          overwrite: true
+
+      - name: Write .env and restart stack
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          DEPLOY_ENV: ${{ secrets.DEPLOY_ENV }}
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: 22
+          envs: DEPLOY_ENV
+          script: |
+            set -euo pipefail
+            cd /opt/unlock
+            umask 077
+            printf '%s\n' "$DEPLOY_ENV" > .env
+            chmod 600 .env
+            docker compose pull cursor-proxy || true
+            docker compose up -d --build --remove-orphans
+            docker compose ps

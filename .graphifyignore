@@ -1,0 +1,43 @@
+# Virtual environments
+**/.venv/
+**/venv/
+**/.env/
+
+# Dependencies & caches
+**/node_modules/
+**/__pycache__/
+**/.pytest_cache/
+**/.ruff_cache/
+**/.mypy_cache/
+**/.tox/
+
+# Git internals (sub-repos)
+**/.git/
+
+# Build artifacts
+**/dist/
+**/build/
+**/*.egg-info/
+
+# Media & docs (semantic extraction needs API key; index via `graphify extract . --update` when needed)
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.webp
+**/*.gif
+**/*.svg
+**/*.ico
+**/*.pdf
+**/*.md
+**/*.mdx
+**/*.html
+**/*.txt
+**/*.rst
+**/*.qmd
+**/*.yaml
+**/*.yml
+**/requirements*.txt
+
+# Local-only graphify output
+graphify-out/cost.json
+graphify-out/cache/

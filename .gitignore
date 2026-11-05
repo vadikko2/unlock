@@ -1,0 +1,40 @@
+# Secrets
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+# Timeweb / Cursor MCP token
+.cursor/mcp.json
+
+# Local WireGuard data if bind-mounted
+data/
+
+# graphify output (rebuilt locally via `graphify update .`)
+graphify-out/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tox/
+*.egg-info/
+dist/
+build/
+
+# Node
+node_modules/
+
+# OS / editor
+.DS_Store
+.idea/
+*.swp
+
+# Backup left by `graphify install` when the skill file changes
+.agents/skills/graphify/SKILL.md.bak
+.deploy-keys/
