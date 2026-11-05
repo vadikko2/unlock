@@ -266,6 +266,17 @@
       "createdAt": "2026-10-18T16:42:16.516Z",
       "updatedAt": "2026-10-18T16:42:16.516Z",
       "enabled": true
+    },
+    "fce42dfe-42ec-4812-9fe3-c88ecfa89237": {
+      "id": "fce42dfe-42ec-4812-9fe3-c88ecfa89237",
+      "name": "skill-test",
+      "address": "10.9.0.25",
+      "privateKey": "qFBiwe7enr36EN5WRtwj3hV6M5KPp0JlF+4mjawf31I=",
+      "publicKey": "IvbIS2SlwINngVvaiVXOclxTXTLYgyONWmRK6X/FbDs=",
+      "preSharedKey": "q96EAbYJ8G8xW5WD9zy+dIsH7HF7SNAl2P7j5lFJ1uc=",
+      "createdAt": "2026-11-05T10:24:31.868Z",
+      "updatedAt": "2026-11-05T10:24:31.868Z",
+      "enabled": true
     }
   }
 }
