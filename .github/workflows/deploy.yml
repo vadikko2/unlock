@@ -34,9 +34,9 @@ jobs:
           WG_PORT: ${{ vars.WG_PORT || '443' }}
           AMNEZIA_UI_PORT: ${{ vars.AMNEZIA_UI_PORT || '51822' }}
           AMNEZIA_LANGUAGE: ${{ vars.AMNEZIA_LANGUAGE || 'ru' }}
-          AMNEZIA_PASSWORD: ${{ secrets.AMNEZIA_PASSWORD }}
+          AMNEZIA_PASSWORD: ${{ vars.AMNEZIA_PASSWORD }}
           PROXY_USER: ${{ vars.PROXY_USER || 'vadkoz' }}
-          PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
+          PROXY_PASSWORD: ${{ vars.PROXY_PASSWORD }}
           PROXY_PORT: ${{ vars.PROXY_PORT || '1080' }}
         with:
           host: ${{ secrets.DEPLOY_HOST }}

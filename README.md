@@ -22,44 +22,38 @@
 1. **Сервер:** любой чистый Ubuntu VDS с установленным Docker и Compose.
 2. **DNS:** A-запись домена (`24testreservation.ru`) указывает на IPv4 сервера (TTL `300`, без проксирования Cloudflare).
 3. **GitHub Secrets & Variables:**
-   - **Secrets** (`Settings -> Secrets and variables -> Actions` -> **Secrets**):
+   - **Secrets** (нельзя прочитать обратно):
      - `DEPLOY_HOST` — IP сервера;
      - `DEPLOY_USER` — пользователь (`root`);
-     - `DEPLOY_SSH_KEY` — приватный SSH-ключ для деплоя;
-     - `AMNEZIA_PASSWORD` — пароль веб-панели Amnezia;
-     - `PROXY_PASSWORD` — пароль прокси для Cursor.
-   - **Variables** (`Settings -> Secrets and variables -> Actions` -> **Variables**):
+     - `DEPLOY_SSH_KEY` — приватный SSH-ключ для деплоя.
+   - **Variables** (видны в настройках репозитория):
      - `WG_HOST` — домен (`24testreservation.ru`);
-     - `PROXY_USER` — логин прокси (`vadkoz`);
-     - `PROXY_PORT` — порт прокси (`1080`);
-     - `AMNEZIA_UI_PORT` — порт веб-панели (`51822`);
-     - `WG_PORT` — порт WireGuard UDP (`443`);
-     - `AMNEZIA_LANGUAGE` — язык интерфейса (`ru`).
+     - `AMNEZIA_PASSWORD` — пароль веб-панели;
+     - `PROXY_USER` / `PROXY_PASSWORD` — логин и пароль прокси Cursor;
+     - `PROXY_PORT` (`1080`), `WG_PORT` (`443`), `AMNEZIA_UI_PORT` (`51822`), `AMNEZIA_LANGUAGE` (`ru`).
 4. **Запуск:** пуш в `master` автоматически генерирует `.env` из переменных и секретов GitHub, копирует файлы на сервер и поднимает контейнеры. Локально для тестов можно использовать `cp .env.example .env && docker compose up -d`.
 
 ---
 
-## Управление клиентами VPN
+## Клиент VPN: от создания до телефона
 
-Клиенты создаются локально через скрипты и коммитятся в git. Через веб-панель создавать клиентов не нужно — следующий деплой их затрёт.
+Пир живёт в `amnezia/wireguard/wg0.json`. На сервер он попадает только пушем в `master`. Человеку отдаётся файл (или QR), не репозиторий. Папку `clients/` в git не класть.
 
 ```bash
-# Добавить клиента и вывести его конфиг для приложения Amnezia
-make add-client NAME="MacBook"
+make add-client NAME="Phone"          # wg0.json + clients/Phone.conf
+# make add-client NAME="Phone" QR=1   # QR прямо в терминале (brew install qrencode)
 
-# Сохранить изменения в git (сразу улетит на сервер)
 git add amnezia/wireguard/wg0.json
-git commit -m "feat: add client MacBook"
-git push
-
-# Посмотреть список всех клиентов
-make list-clients
-
-# Получить конфиг уже существующего клиента
-make export-client NAME="MacBook"
+git commit -m "feat: add client Phone"
+git push                               # дождаться зелёного Deploy to VDS
 ```
 
-Конфиг из вывода импортируется в официальный клиент Amnezia VPN на телефоне или компьютере.
+Дальше одно из двух:
+
+- отправить `clients/Phone.conf` (AirDrop, мессенджер) и в Amnezia импортировать файл;
+- или `make qr NAME="Phone"` и отсканировать QR с экрана терминала.
+
+Повторно выгрузить уже существующего: `make export-client NAME="Phone"`. Список: `make list-clients`. Через веб-панель клиентов не создавать — деплой их затрёт. Пока Actions не зелёный, туннель с новым конфигом не поднимется.
 
 ---
 
