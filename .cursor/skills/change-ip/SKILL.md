@@ -84,8 +84,8 @@ ping -c 3 NEW_IP
 ### 4. GitHub secrets and deploy
 
 1. Update secret `DEPLOY_HOST` on `vadikko2/unlock` to the new IP (`gh secret set DEPLOY_HOST -R vadikko2/unlock -b 'NEW_IP'`).
-2. `DEPLOY_ENV` / `.env`: keep `WG_HOST` as the domain unless a domain change was requested.
-3. Trigger deploy: `gh workflow run "Deploy to VDS" -R vadikko2/unlock` (or equivalent) and wait for success.
+2. GitHub variables (`vars.WG_HOST`): keep domain unchanged unless a domain change was requested.
+3. Trigger deploy: `gh workflow run "Deploy to VDS" -R vadikko2/unlock` (or push to master) and wait for success.
 4. On the server verify:
 
 ```bash

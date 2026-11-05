@@ -21,12 +21,21 @@
 
 1. **Сервер:** любой чистый Ubuntu VDS с установленным Docker и Compose.
 2. **DNS:** A-запись домена (`24testreservation.ru`) указывает на IPv4 сервера (TTL `300`, без проксирования Cloudflare).
-3. **GitHub Secrets:** в настройках репозитория прописаны секреты для деплоя:
-   - `DEPLOY_HOST` — IP сервера;
-   - `DEPLOY_USER` — пользователь (`root`);
-   - `DEPLOY_SSH_KEY` — приватный SSH-ключ для деплоя;
-   - `DEPLOY_ENV` — содержимое `.env` (шаблон в `.env.example`).
-4. **Запуск:** пуш в `master` автоматически копирует файлы на сервер и поднимает контейнеры. Локально для тестов можно использовать `cp .env.example .env && docker compose up -d`.
+3. **GitHub Secrets & Variables:**
+   - **Secrets** (`Settings -> Secrets and variables -> Actions` -> **Secrets**):
+     - `DEPLOY_HOST` — IP сервера;
+     - `DEPLOY_USER` — пользователь (`root`);
+     - `DEPLOY_SSH_KEY` — приватный SSH-ключ для деплоя;
+     - `AMNEZIA_PASSWORD` — пароль веб-панели Amnezia;
+     - `PROXY_PASSWORD` — пароль прокси для Cursor.
+   - **Variables** (`Settings -> Secrets and variables -> Actions` -> **Variables**):
+     - `WG_HOST` — домен (`24testreservation.ru`);
+     - `PROXY_USER` — логин прокси (`vadkoz`);
+     - `PROXY_PORT` — порт прокси (`1080`);
+     - `AMNEZIA_UI_PORT` — порт веб-панели (`51822`);
+     - `WG_PORT` — порт WireGuard UDP (`443`);
+     - `AMNEZIA_LANGUAGE` — язык интерфейса (`ru`).
+4. **Запуск:** пуш в `master` автоматически генерирует `.env` из переменных и секретов GitHub, копирует файлы на сервер и поднимает контейнеры. Локально для тестов можно использовать `cp .env.example .env && docker compose up -d`.
 
 ---
 

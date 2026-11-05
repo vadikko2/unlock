@@ -27,27 +27,33 @@ jobs:
           target: /opt/unlock
           overwrite: true
 
-      - name: Write .env and restart stack
+      - name: Configure .env and restart stack
         uses: appleboy/ssh-action@v1.2.0
         env:
-          DEPLOY_ENV: ${{ secrets.DEPLOY_ENV }}
+          WG_HOST: ${{ vars.WG_HOST || '24testreservation.ru' }}
+          WG_PORT: ${{ vars.WG_PORT || '443' }}
+          AMNEZIA_UI_PORT: ${{ vars.AMNEZIA_UI_PORT || '51822' }}
+          AMNEZIA_LANGUAGE: ${{ vars.AMNEZIA_LANGUAGE || 'ru' }}
+          AMNEZIA_PASSWORD: ${{ secrets.AMNEZIA_PASSWORD }}
+          PROXY_USER: ${{ vars.PROXY_USER || 'vadkoz' }}
+          PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
+          PROXY_PORT: ${{ vars.PROXY_PORT || '1080' }}
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: 22
-          envs: DEPLOY_ENV
+          envs: WG_HOST,WG_PORT,AMNEZIA_UI_PORT,AMNEZIA_LANGUAGE,AMNEZIA_PASSWORD,PROXY_USER,PROXY_PASSWORD,PROXY_PORT
           script: |
             set -euo pipefail
             cd /opt/unlock
             umask 077
-            printf '%s\n' "$DEPLOY_ENV" > .env
+            printf "WG_HOST=%s\nWG_PORT=%s\nWG_DEFAULT_ADDRESS=10.9.0.x\nWG_DEFAULT_DNS=1.1.1.1\nWG_ALLOWED_IPS=0.0.0.0/0\nWG_MTU=1280\nWG_PERSISTENT_KEEPALIVE=25\nAMNEZIA_LANGUAGE=%s\nAMNEZIA_UI_PORT=%s\nAMNEZIA_PASSWORD=%s\nPROXY_PORT=%s\nPROXY_USER=%s\nPROXY_PASSWORD=%s\n" \
+              "$WG_HOST" "$WG_PORT" "$AMNEZIA_LANGUAGE" "$AMNEZIA_UI_PORT" "$AMNEZIA_PASSWORD" "$PROXY_PORT" "$PROXY_USER" "$PROXY_PASSWORD" > .env
             chmod 600 .env
             mkdir -p amnezia/wireguard
             chmod 700 amnezia/wireguard
             chmod 600 amnezia/wireguard/wg0.json 2>/dev/null || true
-            # Drop legacy manually-started containers with the same names
-            docker rm -f cursor-proxy amnezia-wg-easy 2>/dev/null || true
             docker compose pull cursor-proxy || true
             docker compose up -d --build --remove-orphans
             docker compose ps
