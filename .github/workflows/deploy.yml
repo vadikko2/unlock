@@ -43,10 +43,14 @@ jobs:
             umask 077
             printf '%s\n' "$DEPLOY_ENV" > .env
             chmod 600 .env
+            mkdir -p amnezia/wireguard
+            chmod 700 amnezia/wireguard
+            chmod 600 amnezia/wireguard/wg0.json 2>/dev/null || true
             # Drop legacy manually-started containers with the same names
             docker rm -f cursor-proxy amnezia-wg-easy 2>/dev/null || true
             docker compose pull cursor-proxy || true
             docker compose up -d --build --remove-orphans
             docker compose ps
+            docker exec amnezia-wg-easy wg show | grep -c '^peer:' || true
             docker compose logs --tail 30 amnezia-wg-easy
             docker compose logs --tail 20 cursor-proxy

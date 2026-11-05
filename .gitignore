@@ -8,7 +8,10 @@ secrets/
 # Timeweb / Cursor MCP token
 .cursor/mcp.json
 
-# Local WireGuard data if bind-mounted
+# Derived WireGuard conf (regenerated from wg0.json on the server)
+amnezia/wireguard/wg0.conf
+
+# Misc local
 data/
 
 # graphify output (rebuilt locally via `graphify update .`)
@@ -38,3 +41,4 @@ node_modules/
 # Backup left by `graphify install` when the skill file changes
 .agents/skills/graphify/SKILL.md.bak
 .deploy-keys/
+.backup_wg/

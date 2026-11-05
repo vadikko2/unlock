@@ -23,7 +23,8 @@ services:
       WG_MTU: ${WG_MTU:-1280}
       WG_PERSISTENT_KEEPALIVE: ${WG_PERSISTENT_KEEPALIVE:-25}
     volumes:
-      - amnezia-wg-data:/etc/wireguard
+      # Git-tracked state: amnezia/wireguard/wg0.json is the source of truth
+      - ./amnezia/wireguard:/etc/wireguard
     ports:
       - "${WG_PORT:-443}:443/udp"
       - "${AMNEZIA_UI_PORT:-51822}:51822/tcp"
@@ -44,7 +45,3 @@ services:
       - "-L=${PROXY_USER:?set PROXY_USER in .env}:${PROXY_PASSWORD:?set PROXY_PASSWORD in .env}@:8080"
     ports:
       - "${PROXY_PORT:-1080}:8080/tcp"
-
-volumes:
-  amnezia-wg-data:
-    name: unlock_amnezia_wg_data

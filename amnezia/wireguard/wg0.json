@@ -1,0 +1,271 @@
+{
+  "server": {
+    "privateKey": "CL2NHWrUa4zWpONpyzNmP534pJbb+U/yalVw19rtrl0=",
+    "publicKey": "92GIf6XJcteto47/9uNoXUZGnNfVygbCJv3xVWTighw=",
+    "address": "10.9.0.1",
+    "jc": 6,
+    "jmin": 50,
+    "jmax": 1000,
+    "s1": 48,
+    "s2": 74,
+    "h1": 2123946699,
+    "h2": 1878170450,
+    "h3": 975121751,
+    "h4": 77821603
+  },
+  "clients": {
+    "a1831e7a-2745-456e-8cd9-4e536867296f": {
+      "id": "a1831e7a-2745-456e-8cd9-4e536867296f",
+      "name": "Вадим IPhone",
+      "address": "10.9.0.2",
+      "privateKey": "SD/5XvKbHdaWFhy9GUMzEyo7zc840S2xXrFsWMhoOHU=",
+      "publicKey": "AuDQd/vQBFi72bsDLmPWXvd1Ldp2KNJosANES2uNxTw=",
+      "preSharedKey": "niKaTvFdMiWK+5vUJVmlxvWmRyKguLP4kOphwlEY3Q0=",
+      "createdAt": "2026-09-28T14:05:52.346Z",
+      "updatedAt": "2026-09-28T14:27:16.312Z",
+      "enabled": true
+    },
+    "57fe6814-5c21-4260-8b1d-7b74422850e2": {
+      "id": "57fe6814-5c21-4260-8b1d-7b74422850e2",
+      "name": "Юра 1",
+      "address": "10.9.0.3",
+      "privateKey": "sEdFOxsFfEh86OlLTkt5KrocVxYZuaiTaER27auKiH8=",
+      "publicKey": "XqT36hu4Ju6eSC3LJzbok3j7Czh9USc/awvse9w3uGM=",
+      "preSharedKey": "4IHaMISYMxX9deK0l9Zf/3IQ0J5HfvAoM/NTlw3N3Rw=",
+      "createdAt": "2026-09-28T14:10:46.241Z",
+      "updatedAt": "2026-09-28T14:10:46.241Z",
+      "enabled": true
+    },
+    "0f580314-6924-45f4-9744-ebd028801c45": {
+      "id": "0f580314-6924-45f4-9744-ebd028801c45",
+      "name": "Юра 2",
+      "address": "10.9.0.4",
+      "privateKey": "eGEZ6wEjQ+g9AGDsllzEk2IAp3eVncis8LGlYr29t2A=",
+      "publicKey": "y+uualDthrxdc7MNo/WngpuZvoAIcXCOBdZAnfakgUE=",
+      "preSharedKey": "Bv9Ff7vbG5i+iXSTzaIL47MfoMJfWY4KWDhitSwe0to=",
+      "createdAt": "2026-09-28T14:12:51.246Z",
+      "updatedAt": "2026-09-29T17:30:42.756Z",
+      "enabled": true
+    },
+    "c666f845-e453-4be2-908b-95d6b7e1dbb4": {
+      "id": "c666f845-e453-4be2-908b-95d6b7e1dbb4",
+      "name": "Саша IPhone",
+      "address": "10.9.0.5",
+      "privateKey": "SNcDsFFM5II+IYF8vahetdg/tRIGdOAAvOUKwjwcoFI=",
+      "publicKey": "+hX8t5udDjug1eM5E7++e6X9/gWHBRXK+OhCxjSpFEs=",
+      "preSharedKey": "lOa7jETiu+nVJX3E4vY8N+yQc0LE7VmZhwcCdhgdsDE=",
+      "createdAt": "2026-09-28T14:17:15.527Z",
+      "updatedAt": "2026-10-16T12:11:30.693Z",
+      "enabled": true
+    },
+    "f148858e-232f-4846-b677-e3ed2ed21db4": {
+      "id": "f148858e-232f-4846-b677-e3ed2ed21db4",
+      "name": "Алексей Заусалин 1",
+      "address": "10.9.0.6",
+      "privateKey": "CHAQk3Jr8YUnMOGcbwgY+7qXLWTF0o0AKBnctRtcI1g=",
+      "publicKey": "a6TQUwELnFNRFvPp9QoVNkBybtaBv0B9CKSNl42qLnQ=",
+      "preSharedKey": "7V3fzoVyP+iaQ0mTOKviyrzI6XfdreTYdkKLeAfy+Hg=",
+      "createdAt": "2026-09-28T14:22:10.110Z",
+      "updatedAt": "2026-09-28T14:22:10.110Z",
+      "enabled": true
+    },
+    "b3132da3-b5a3-4708-b70c-78785a80447a": {
+      "id": "b3132da3-b5a3-4708-b70c-78785a80447a",
+      "name": "Вадим Мас личный",
+      "address": "10.9.0.7",
+      "privateKey": "YObpNYtsl6WysyRM74Wxac8RZAymxfnz+2Dxmpt9W1k=",
+      "publicKey": "F5Eos4YglypXaQm4xnEvUBWzxMIzEI8rI4tdoH0Ksic=",
+      "preSharedKey": "3eteHn9o1UfI2WZZMzLAwaZ0+2u+Zjtc6QZLk1uCY7s=",
+      "createdAt": "2026-09-28T14:27:46.765Z",
+      "updatedAt": "2026-10-16T12:11:33.620Z",
+      "enabled": true
+    },
+    "34c07487-5d91-44c7-9939-2cc800fba666": {
+      "id": "34c07487-5d91-44c7-9939-2cc800fba666",
+      "name": "Алексей Куварзин 1",
+      "address": "10.9.0.8",
+      "privateKey": "UKOclxcW5ix6MgWFNfHbuYRObdj5LyoONqofBjTIfl4=",
+      "publicKey": "tfmcLgCHFbXBKYcnytT2FFOdNZHBH5dyDm04L1MnsXQ=",
+      "preSharedKey": "b+N6IcK4aPg/sYM8WXgHUcLTHBSvaOIIZtQDrRYyWKI=",
+      "createdAt": "2026-09-28T14:44:25.624Z",
+      "updatedAt": "2026-09-30T08:27:15.621Z",
+      "enabled": true
+    },
+    "98d9ac2f-6ffe-4c9b-807d-1589f553b25a": {
+      "id": "98d9ac2f-6ffe-4c9b-807d-1589f553b25a",
+      "name": "Алексей Куварзин 2",
+      "address": "10.9.0.9",
+      "privateKey": "qDtZ6/E3qdDKwMB/eSpOc5Dwi74+hKCRDjqJ/hj4OWo=",
+      "publicKey": "8FMNkH/GGPFRVNl+bjbM1gWTz9Of/Sj4kEqHpUe4hQI=",
+      "preSharedKey": "RYjlDTxHtpEJnL8BJi1jGf4321vCWG1p8h4gZ3/gGKo=",
+      "createdAt": "2026-09-28T14:44:35.259Z",
+      "updatedAt": "2026-09-30T08:27:17.693Z",
+      "enabled": true
+    },
+    "109940ad-0ef1-4d94-8025-9bd4705688c7": {
+      "id": "109940ad-0ef1-4d94-8025-9bd4705688c7",
+      "name": "Папа 1",
+      "address": "10.9.0.10",
+      "privateKey": "0I7f5r4H+BlsvkcQysMSMNDyTkTYr715iBrrBFDFtks=",
+      "publicKey": "bYd3iW0MCKVrE9jtMZ61yk0eOTXtGTVzzGgzK/Iaalg=",
+      "preSharedKey": "tfeYvaY1l7BmiJadUIl0xSE7IP6WMnzYeQM7UeKFRb4=",
+      "createdAt": "2026-09-28T14:47:24.726Z",
+      "updatedAt": "2026-09-28T14:47:24.726Z",
+      "enabled": true
+    },
+    "8d16ba4b-fdd1-447f-8e95-a3756dd1fd42": {
+      "id": "8d16ba4b-fdd1-447f-8e95-a3756dd1fd42",
+      "name": "Папа 2",
+      "address": "10.9.0.11",
+      "privateKey": "uOFnepF2cd6+VAFRRVE48NEaCjlCeEMkt54IHs3rUnk=",
+      "publicKey": "CTqUTrCF+YITP7Tzs7KyOw2NcFRa3cpVByNIEs0P1AY=",
+      "preSharedKey": "nE8GT8uMi5C/rhu/lJk5DDu754PGgGV6Cw/s7aRJ4dI=",
+      "createdAt": "2026-09-28T14:47:31.135Z",
+      "updatedAt": "2026-09-28T14:47:31.135Z",
+      "enabled": true
+    },
+    "d419af06-2d71-4cf0-a60a-7707029bcf5c": {
+      "id": "d419af06-2d71-4cf0-a60a-7707029bcf5c",
+      "name": "Алексей Заусалин iphone",
+      "address": "10.9.0.12",
+      "privateKey": "MAtPOrkwdLnAXtkHA2ghXOioi15pKRGEjVHF7xPKO3M=",
+      "publicKey": "HJ54tfdqZ65oWquL+mW0dmFYXWnuJH1n3GfumbASNzo=",
+      "preSharedKey": "5Cl4IaXnzQDRKpIakmp9hTv+WoahTO+oKTzYFlVFegM=",
+      "createdAt": "2026-09-29T14:17:18.172Z",
+      "updatedAt": "2026-09-29T14:17:18.172Z",
+      "enabled": true
+    },
+    "3a1226b3-1c0d-419c-a9a8-da411990669e": {
+      "id": "3a1226b3-1c0d-419c-a9a8-da411990669e",
+      "name": "Алексей заусалин melrose",
+      "address": "10.9.0.13",
+      "privateKey": "UL32raU3wX/m7//XYoKyOncBrV1lO7pRKJ7zUjFvnGQ=",
+      "publicKey": "WSdqodKoVKgsbZ9OlkKdidYQAHbNv19UO0np7njaCik=",
+      "preSharedKey": "Kvb3QHLezTGMEXNAXEQHBqoxeu4Pv+9AQlxvCxgGOfM=",
+      "createdAt": "2026-09-29T14:19:59.679Z",
+      "updatedAt": "2026-09-29T14:19:59.679Z",
+      "enabled": true
+    },
+    "62591c1d-9bd8-4618-b39e-67210066ee54": {
+      "id": "62591c1d-9bd8-4618-b39e-67210066ee54",
+      "name": "Алексей Куварзин 3",
+      "address": "10.9.0.14",
+      "privateKey": "CMs2yJNVGIBmDXBK27QlWEspYogVRbowVm/IMPXlUng=",
+      "publicKey": "t8V2KtLHM1FYF1chN1sIaueGkAMm/0UMIIvL7l7UG1M=",
+      "preSharedKey": "EJ4C4xldaaaD8jU27nU1ZnCvUkkT0NEzjNZinn6QiwM=",
+      "createdAt": "2026-09-29T18:58:30.510Z",
+      "updatedAt": "2026-09-29T18:58:30.510Z",
+      "enabled": true
+    },
+    "e7886eb5-f7de-4634-8cfe-0ff8cfea5ea8": {
+      "id": "e7886eb5-f7de-4634-8cfe-0ff8cfea5ea8",
+      "name": "Игорь 1",
+      "address": "10.9.0.15",
+      "privateKey": "aK3TsUKkYxccRCs4xMbFGuQ/TRwIuvQpVZ/UJlfdzX4=",
+      "publicKey": "l7/eyKzVmiaS9GUju76WTKXuNcVKbOUr6JoSl+0oKw4=",
+      "preSharedKey": "HzOuaRBebt8jeD8T04v6LNlonKBk5jKO5fTPtA837PQ=",
+      "createdAt": "2026-09-30T20:08:37.400Z",
+      "updatedAt": "2026-09-30T20:08:37.400Z",
+      "enabled": true
+    },
+    "60244dda-d402-4a7f-8c99-42b808772ebf": {
+      "id": "60244dda-d402-4a7f-8c99-42b808772ebf",
+      "name": "Игорь 2",
+      "address": "10.9.0.16",
+      "privateKey": "4Css8hoqmJnEOLp2gtCA3+oCj9X8KkwPuv5tBmfLDkA=",
+      "publicKey": "WFtXTZ5mN7rVHBrjAKmRcuJ+zYmZtMcy5w2fl3CoRjc=",
+      "preSharedKey": "4zJ4uWQZw9RFF7kOKpwrd9WGiRrfMirWrjzknk742NU=",
+      "createdAt": "2026-09-30T20:31:08.822Z",
+      "updatedAt": "2026-09-30T20:31:08.822Z",
+      "enabled": true
+    },
+    "8ad41b96-d378-4a87-88d7-d27c3cc47f42": {
+      "id": "8ad41b96-d378-4a87-88d7-d27c3cc47f42",
+      "name": "Лиза 1",
+      "address": "10.9.0.17",
+      "privateKey": "gBid7nG2kI5ZIKROWJ7Kp96X9Mqvkt9r5gW/QRvgYWg=",
+      "publicKey": "cZjyjacAf2ryxUKSe77qazihlMZ81M8f67xqlVx13WQ=",
+      "preSharedKey": "RYNWNtanj8UkrYRljkOhAsJ6Z+Oe9d3ejfNOeiyPUQo=",
+      "createdAt": "2026-09-30T20:56:08.273Z",
+      "updatedAt": "2026-09-30T20:56:08.273Z",
+      "enabled": true
+    },
+    "8e2423d3-9fc3-4bc5-bf34-4d7bc0762bc2": {
+      "id": "8e2423d3-9fc3-4bc5-bf34-4d7bc0762bc2",
+      "name": "Лиза 2",
+      "address": "10.9.0.18",
+      "privateKey": "KBlXyTVdDcNHXzYlVguPotAU/sAizPgJ0fLpHG87cVM=",
+      "publicKey": "ttfwHuHqzdNc1/+9cHXmlHjaJKw/n5m83q/7nf3b0AY=",
+      "preSharedKey": "NCybruUlqaUUULdAy12Nruepigu2wkdKWFzhregwHzU=",
+      "createdAt": "2026-09-30T20:56:15.850Z",
+      "updatedAt": "2026-09-30T20:56:15.850Z",
+      "enabled": true
+    },
+    "a8d6e11c-ce5c-4297-b83b-ce3484feb8f9": {
+      "id": "a8d6e11c-ce5c-4297-b83b-ce3484feb8f9",
+      "name": "Мама 1",
+      "address": "10.9.0.19",
+      "privateKey": "eKGZMFDknNtRhmSt4KY5SLYhtJuOfp/xyKNhIlsvZmg=",
+      "publicKey": "vCtQ5EBSPoVk/SdsMA8TXjfualB7x6TeKDX4nArGCBk=",
+      "preSharedKey": "KWPovgH6LfzoW7G/q4T6vT3sRm8V7FWyGupC6V+lWYs=",
+      "createdAt": "2026-10-08T15:53:08.589Z",
+      "updatedAt": "2026-10-08T15:53:08.589Z",
+      "enabled": true
+    },
+    "80544650-c28e-4276-ac21-a2fd88767d49": {
+      "id": "80544650-c28e-4276-ac21-a2fd88767d49",
+      "name": "Алексей Заусалин -deeplom",
+      "address": "10.9.0.20",
+      "privateKey": "aD0X+RygBGmZ01Dfhrxym7q6h2WhVhRYVOXkjUPQI28=",
+      "publicKey": "sZ/qyrom/QOQ1FzTD4I/PBtfGV0XAuqdmaYhwFoAoSM=",
+      "preSharedKey": "iXImRi4CamnkRUoi0gu4s470XSdHb+dnNAO6tJtkFfc=",
+      "createdAt": "2026-10-09T15:08:57.925Z",
+      "updatedAt": "2026-10-09T15:08:57.925Z",
+      "enabled": true
+    },
+    "34fb988f-18fb-43e5-9360-05cae08c2809": {
+      "id": "34fb988f-18fb-43e5-9360-05cae08c2809",
+      "name": "Игорь 3",
+      "address": "10.9.0.21",
+      "privateKey": "QP2hoQBProsTp0VSbORet0y2faPQxV/MhtJ611CulGM=",
+      "publicKey": "9rJSntCSIXJm11CVRPmFABsKZaT/YyPf7tObq1GhQWM=",
+      "preSharedKey": "S5sYk1oaQ7Sw6F3hXvFvSaVrCiDw9LSuelA5qdX3gN0=",
+      "createdAt": "2026-10-12T12:33:47.292Z",
+      "updatedAt": "2026-10-12T12:33:47.292Z",
+      "enabled": true
+    },
+    "41fe957d-66b0-4940-b50f-1660d1519eb3": {
+      "id": "41fe957d-66b0-4940-b50f-1660d1519eb3",
+      "name": "Папа 3",
+      "address": "10.9.0.22",
+      "privateKey": "eLpMxazG/J7zE6F54RyOIUpnXNd2eu8POUriUyKc8UU=",
+      "publicKey": "fGaukpvqe1IupWpjht0QSasCoxhOT3vBQmDSDs3w62o=",
+      "preSharedKey": "yni/S8kRv79rihiPbh6KnKumi9DO3YKOxXO3XrO82Jw=",
+      "createdAt": "2026-10-13T07:44:15.506Z",
+      "updatedAt": "2026-10-13T07:44:15.506Z",
+      "enabled": true
+    },
+    "e9b3e9ec-28a8-4e5a-97b9-d23a6788b6b9": {
+      "id": "e9b3e9ec-28a8-4e5a-97b9-d23a6788b6b9",
+      "name": "Саша айфон 2",
+      "address": "10.9.0.23",
+      "privateKey": "AMkG3SKJfUOFJjRBQArLDWT6G8t+/bu0mnmnGX8mBGY=",
+      "publicKey": "RzVW2VfA/L0A70/n0PTcG3akO/edUv4u6yvJUccr3GY=",
+      "preSharedKey": "adYBMKTqfrvi89DVfItSXofpvfYx/LsBU0VSKrEW7GE=",
+      "createdAt": "2026-10-13T15:22:36.137Z",
+      "updatedAt": "2026-10-16T12:11:36.736Z",
+      "enabled": true
+    },
+    "8f552f58-5606-4b2a-b877-aacc80ec65fd": {
+      "id": "8f552f58-5606-4b2a-b877-aacc80ec65fd",
+      "name": "Ольга Ивановна",
+      "address": "10.9.0.24",
+      "privateKey": "cA/dWvDOpQrKUzroAbpAZiQ4XJgrXqmebYJD665sW0Q=",
+      "publicKey": "V5W8B0yi5ZoAuHerPmLsshiE0JVR8fzHPDVowkN1zBo=",
+      "preSharedKey": "a7u1R9UryUn3vuOhikPiaSohPrLqTNIDx6HUUaT2bFE=",
+      "createdAt": "2026-10-18T16:42:16.516Z",
+      "updatedAt": "2026-10-18T16:42:16.516Z",
+      "enabled": true
+    }
+  }
+}
