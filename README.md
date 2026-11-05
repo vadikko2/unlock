@@ -64,13 +64,13 @@ make send NAME="Phone"     # телефон в той же Wi‑Fi, сканир
 В настройках Cursor (`Cmd + Shift + P` -> `Preferences: Open User Settings (JSON)`):
 
 ```json
-"http.proxy": "http://PROXY_USER:PROXY_PASSWORD@SERVER_IP:1080",
+"http.proxy": "http://PROXY_USER:PROXY_PASSWORD@24testreservation.ru:1080",
 "http.proxyStrictSSL": true,
 "http.proxySupport": "override",
 "cursor.general.disableHttp2": true
 ```
 
-- Подставляйте **прямой IP сервера**, а не домен.
+- В адресе прокси всегда домен `24testreservation.ru`, не IP. После смены IP A-запись обновляется, строка в Cursor остаётся той же.
 - Параметр `cursor.general.disableHttp2: true` критичен: без него стриминг ответов ИИ виснет.
 - После сохранения полностью перезапустите Cursor.
 
@@ -83,7 +83,7 @@ make send NAME="Phone"     # телефон в той же Wi‑Fi, сканир
 1. В панели Timeweb смените IP и обновите A-запись домена на новый адрес (TTL `300`).
 2. Проверьте резолв: `dig +short 24testreservation.ru`.
 3. Обновите секрет `DEPLOY_HOST` в GitHub и запустите деплой (`Actions -> Deploy to VDS -> Run workflow`).
-4. В Cursor `settings.json` укажите новый IP.
+4. Строку прокси в Cursor не трогать: там домен, он сам укажет на новый IP.
 5. На устройствах переподключите туннель Amnezia (домен подтянет новый IP сам, перевыпуск ключей не нужен).
 
 *Для Cursor доступен агентский скилл `/change-ip`, автоматизирующий этот чек-лист.*

@@ -98,13 +98,13 @@ Peers in `wg show` must not reset to zero (git `wg0.json` on the bind mount).
 
 ### 5. Cursor proxy on the user machine
 
-Remind the user to update local Cursor `settings.json`:
+Cursor `settings.json` must keep the domain, never a raw IP:
 
 ```json
-"http.proxy": "http://PROXY_USER:PROXY_PASSWORD@NEW_IP:1080"
+"http.proxy": "http://PROXY_USER:PROXY_PASSWORD@24testreservation.ru:1080"
 ```
 
-Use the IP, not the domain. Fully restart Cursor.
+After an IP change the A-record moves and this line stays. Do not tell the user to put the new IP in `http.proxy`. Fully restart Cursor only if the line itself changed.
 
 ### 6. Amnezia clients
 
