@@ -35,25 +35,27 @@
 
 ---
 
-## Клиент VPN: от создания до телефона
+## Клиент VPN
 
-Пир живёт в `amnezia/wireguard/wg0.json`. На сервер он попадает только пушем в `master`. Человеку отдаётся файл (или QR), не репозиторий. Папку `clients/` в git не класть.
+Пир пишется в `amnezia/wireguard/wg0.json` и попадает на сервер только после пуша в `master`. Пока Deploy не зелёный, новый туннель не поднимется. Через веб-панель клиентов не создавать. `clients/` в git не класть.
 
 ```bash
-make add-client NAME="Phone"          # wg0.json + clients/Phone.conf
-# make add-client NAME="Phone" QR=1   # QR прямо в терминале (brew install qrencode)
-
-git add amnezia/wireguard/wg0.json
-git commit -m "feat: add client Phone"
-git push                               # дождаться зелёного Deploy to VDS
+make add-client NAME="Phone"
+git add amnezia/wireguard/wg0.json && git commit -m "feat: add client Phone" && git push
+make list-clients
+make export-client NAME="Phone"   # заново собрать clients/Phone.conf
 ```
 
-Дальше одно из двух:
+Отдать конфиг на телефон и дальше переслать:
 
-- отправить `clients/Phone.conf` (AirDrop, мессенджер) и в Amnezia импортировать файл;
-- или `make qr NAME="Phone"` и отсканировать QR с экрана терминала.
+```bash
+brew install qrcp          # один раз, программа которая показывает QR на скачивание
+make send NAME="Phone"     # телефон в той же Wi‑Fi, сканировать QR в терминале
+```
 
-Повторно выгрузить уже существующего: `make export-client NAME="Phone"`. Список: `make list-clients`. Через веб-панель клиентов не создавать — деплой их затрёт. Пока Actions не зелёный, туннель с новым конфигом не поднимется.
+Скачается `Phone.conf`. Его пересылаешь кому нужно, в Amnezia — импорт файла. Остановка сервера: Ctrl+C. Если QR ведёт не в ту сеть: `make send NAME="Phone" IFACE=en1`.
+
+Файл также лежит локально в `clients/Phone.conf`, его можно отдать AirDrop или мессенджером без QR.
 
 ---
 

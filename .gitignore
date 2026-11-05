@@ -11,6 +11,9 @@ secrets/
 # Derived WireGuard conf (regenerated from wg0.json on the server)
 amnezia/wireguard/wg0.conf
 
+# Per-device handoff files (private keys). Source of truth is wg0.json.
+clients/
+
 # Misc local
 data/
 
