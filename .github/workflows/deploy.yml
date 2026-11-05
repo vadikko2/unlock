@@ -43,6 +43,10 @@ jobs:
             umask 077
             printf '%s\n' "$DEPLOY_ENV" > .env
             chmod 600 .env
+            # Drop legacy manually-started containers with the same names
+            docker rm -f cursor-proxy amnezia-wg-easy 2>/dev/null || true
             docker compose pull cursor-proxy || true
             docker compose up -d --build --remove-orphans
             docker compose ps
+            docker compose logs --tail 30 amnezia-wg-easy
+            docker compose logs --tail 20 cursor-proxy
